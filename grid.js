@@ -1,4 +1,4 @@
-import { Cell } from "./cell";
+import { Cell } from "./cell.js";
 
 const GRID_SIZE = 4
 const CELLS_COUNT = GRID_SIZE * GRID_SIZE
@@ -11,5 +11,11 @@ export class Grid {
                 new Cell(grid_element, i % GRID_SIZE, Math.floor(i / GRID_SIZE))
             );
         }
+    }
+
+    getRandomEmptyCell() {
+        const empty_cells = this.cells.filter(cell => cell.isEmpty());
+        const random_index = Math.floor(Math.random() * empty_cells.length);
+        return empty_cells[random_index];
     }
 }
