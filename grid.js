@@ -1,30 +1,41 @@
 import { Cell } from "./cell.js";
 
-const GRID_SIZE = 4
-const CELLS_COUNT = GRID_SIZE * GRID_SIZE
+const GRID_SIZE = 4;
+const CELLS_COUNT = GRID_SIZE * GRID_SIZE;
 
 export class Grid {
-    constructor(grid_element) {
+    constructor(gridElement) {
         this.cells = [];
         for (let i = 0; i < CELLS_COUNT; i++) {
             this.cells.push(
-                new Cell(grid_element, i % GRID_SIZE, Math.floor(i / GRID_SIZE))
+                new Cell(gridElement, i % GRID_SIZE, Math.floor(i / GRID_SIZE))
             );
         }
 
         this.cellsGroupedByColumn = this.groupCellsByColumn();
+        this.cellsGroupedByReversedColumn = this.cellsGroupedByColumn.map(column => [...column].reverse());
+        this.cellsGroupedByRow = this.groupCellsByRow();
+        this.cellsGroupedByReversedRow = this.cellsGroupedByRow.map(raw => [...raw].reverse());
     }
 
     getRandomEmptyCell() {
-        const empty_cells = this.cells.filter(cell => cell.isEmpty());
-        const random_index = Math.floor(Math.random() * empty_cells.length);
-        return empty_cells[random_index];
+        const emptyCells = this.cells.filter(cell => cell.isEmpty());
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        return emptyCells[randomIndex];
     }
 
     groupCellsByColumn() {
         return this.cells.reduce((groupedCells, cell) => {
             groupedCells[cell.x] = groupedCells[cell.x] || [];
             groupedCells[cell.x][cell.y] = cell;
+            return groupedCells;
+        }, []);
+    }
+
+    groupCellsByRow() {
+        return this.cells.reduce((groupedCells, cell) => {
+            groupedCells[cell.y] = groupedCells[cell.y] || [];
+            groupedCells[cell.y][cell.x] = cell;
             return groupedCells;
         }, []);
     }
